@@ -1,6 +1,7 @@
 from typing import Any, Optional, Sequence, Type, TypeVar
 
 from sqlalchemy import Row, RowMapping, exc, select
+from sqlalchemy.exc import MultipleResultsFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.sql import Select
@@ -29,8 +30,13 @@ class DBMixin:
             return None
 
     @classmethod
-    async def get(cls: Type[T], db: AsyncSession, pk: int) -> Optional[T]:
-        return await db.get(cls, pk)
+    async def get(cls: Type[T], db: AsyncSession, **filters) -> Optional[T]:
+        stmt = select(cls).filter_by(**filters)
+        result = await db.execute(stmt)
+        try:
+            return result.scalars().unique().one_or_none()
+        except MultipleResultsFound:
+            raise
 
     @classmethod
     async def filter(
@@ -47,7 +53,7 @@ class DBMixin:
         return result.scalars().all()
 
     @classmethod
-    async def execute_query(
+    async def query(
         cls: Type[T], db: AsyncSession, stmt: Select
     ) -> Sequence[Row[Any] | RowMapping | Any]:
         result = await db.execute(stmt)

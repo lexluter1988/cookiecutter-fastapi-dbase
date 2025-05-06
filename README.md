@@ -8,6 +8,7 @@ Project has alembic, postgresql adapter and generic DBMixin with create, retriev
 ├── REAMDE.md
 ├── app
 ├── alembic
+│   ├── versions
 │   ├── __init__.py
 │   ├── db
 │   │   ├── __init__.py
@@ -32,6 +33,7 @@ email-validator = "^2.2.0"
 asyncpg = "^0.30.0"
 alembic = "^1.15.2"
 pre-commit = "^4.2.0"
+greenlet = "^3.2.1"
 ```
 
 ## Database
