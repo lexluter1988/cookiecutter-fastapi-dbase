@@ -2,7 +2,7 @@
 name = "fastsql"
 version = "0.1.0"
 description = ""
-authors = ["Alexey Suponin <lexxsmith@gmail.com>"]
+authors = ["{{ cookiecutter.author_name }}"]
 license = "MIT"
 readme = "README.md"
 
